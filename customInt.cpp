@@ -205,9 +205,11 @@ std::string customInt::asDecimal() const
 	{
 		auto inverse = *this;
 		inverse.negate();
+
 		for (std::size_t x = 0, s = inverse.digits.size() - 1; x < s; ++x)
 		{
 			if (inverse.digits[x]) decimal = add(decimal, base);
+
 			base = add(base, base);
 		}
 		decimal.insert(decimal.begin(), '-');
@@ -217,6 +219,7 @@ std::string customInt::asDecimal() const
 		for (std::size_t x = 0, s = digits.size() - 1; x < s; ++x)
 		{
 			if (digits[x]) decimal = add(decimal, base);
+
 			base = add(base, base);
 		}
 	}
@@ -244,8 +247,9 @@ void customInt::negate()
 }
 void customInt::trim()
 {
-	std::size_t trimBegin = digits.size() - 2;
-	
+	//Default to leaving only two bits
+	std::size_t trimBegin = 2;
+
 	if (getSign())
 	{
 		for (std::size_t x = digits.size() - 1; x-- > 0;)
@@ -468,7 +472,7 @@ bool customInt::operator>=(const customInt& rhs) const
 	return (*this == rhs || *this > rhs);
 }
 
-customInt customInt::operator+(customInt rhs)
+customInt customInt::operator+(customInt& rhs)
 {
 	bool c = false;
 
@@ -531,6 +535,7 @@ customInt discardAdd(const customInt& a, const customInt& b)
 customInt customInt::operator*(customInt rhs)
 {
 	/*INIT*/
+
 	/*lhs and rhs must have the same width*/
 	if (rhs.digits.size() > digits.size())
 	{
@@ -540,7 +545,7 @@ customInt customInt::operator*(customInt rhs)
 	else if(rhs.digits.size() < digits.size())
 	{
 		/*Insert bits to make the sizes equal*/
-		rhs.digits.resize(digits.size(), rhs.digits[digits.size() - 1]);
+		rhs.digits.resize(digits.size(), rhs.digits[rhs.digits.size() - 1]);
 	}
 
 	customInt neg = rhs;
@@ -561,6 +566,7 @@ customInt customInt::operator*(customInt rhs)
 	{
 		/*Only executes if both bits have different values.
 		If they are the same, it hops directly to the shift*/
+
 		if (finalBit != reg.digits[0])
 		{
 			//Grab final n bits *MAKE CUSTOM CONSTRUCTOR for range init*
@@ -597,15 +603,15 @@ customInt customInt::operator*(customInt rhs)
 	return reg;
 }
 
-void customInt::operator+=(customInt rhs)
+void customInt::operator+=(customInt& rhs)
 {
 	*this = *this + rhs;
 }
-void customInt::operator-=(customInt rhs)
+void customInt::operator-=(customInt& rhs)
 {
 	*this = *this - rhs;
 }
-void customInt::operator*=(customInt rhs)
+void customInt::operator*=(customInt& rhs)
 {
 	*this = *this * rhs;
 }

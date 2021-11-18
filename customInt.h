@@ -49,13 +49,13 @@ struct customInt
 	bool operator<=(const customInt& rhs) const;
 	bool operator>=(const customInt& rhs) const;
 
-	customInt operator+(customInt rhs);
+	customInt operator+(customInt& rhs);
 	customInt operator-(customInt rhs);
 	customInt operator*(customInt rhs);
 
-	void operator+=(customInt rhs);
-	void operator-=(customInt rhs);
-	void operator*=(customInt rhs);
+	void operator+=(customInt& rhs);
+	void operator-=(customInt& rhs);
+	void operator*=(customInt& rhs);
 
 	void operator++(int);
 	void operator--(int);
